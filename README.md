@@ -20,7 +20,6 @@ Session metadata (origin window, focused window, tab id) lives in `chrome.storag
 - Click the extension icon  
 - Right-click → **Toggle TabFocus**  
 - Keyboard: **Ctrl+Shift+F** (Windows/Linux) / **⌘⇧F** (macOS) — remappable in `chrome://extensions/shortcuts`  
-- Badge shows **ON** while TabFocus considers the tab focused  
 
 ## Install (unpacked zip — no npm)
 
