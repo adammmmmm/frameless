@@ -1,6 +1,12 @@
 /**
- * Build a load-unpacked zip: extract, then Load unpacked on the folder.
- * No npm install required for end users of the zip.
+ * Build a Windows-compatible load-unpacked zip via PowerShell Compress-Archive.
+ * Layout:
+ *   tabfocus-vX.Y.Z-unpacked.zip
+ *     tabfocus/
+ *       manifest.json
+ *       background.js
+ *       ...
+ * Extract the zip, then Load unpacked → select the `tabfocus` folder.
  */
 import { createHash } from "node:crypto";
 import { spawnSync } from "node:child_process";
@@ -18,7 +24,8 @@ import { fileURLToPath } from "node:url";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const dist = path.join(root, "dist");
-const stage = path.join(dist, "tabfocus");
+const stageRoot = path.join(dist, "stage");
+const stage = path.join(stageRoot, "tabfocus");
 const version = JSON.parse(readFileSync(path.join(root, "package.json"), "utf8")).version;
 const zipName = `tabfocus-v${version}-unpacked.zip`;
 const zipPath = path.join(dist, zipName);
@@ -34,7 +41,7 @@ if (!existsSync(path.join(root, "background.js"))) {
   process.exit(1);
 }
 
-rmSync(stage, { recursive: true, force: true });
+rmSync(stageRoot, { recursive: true, force: true });
 mkdirSync(path.join(stage, "src", "images", "icons"), { recursive: true });
 
 for (const name of [
@@ -53,18 +60,55 @@ cpSync(path.join(root, "src", "images", "icons"), path.join(stage, "src", "image
 });
 
 rmSync(zipPath, { force: true });
-// tar -a -cf makes a zip on Windows 10+ / modern tar
-const tar = spawnSync("tar", ["-a", "-cf", zipPath, "-C", stage, "."], {
-  encoding: "utf8",
-});
-if (tar.status !== 0 || !existsSync(zipPath)) {
-  console.error(tar.stderr || tar.stdout || "tar zip failed");
+
+// Compress-Archive produces Explorer-compatible zips (unlike `tar -a` on some setups).
+const ps = `
+$ErrorActionPreference = 'Stop'
+Compress-Archive -Path (Join-Path '${stageRoot.replace(/'/g, "''")}' 'tabfocus') -DestinationPath '${zipPath.replace(/'/g, "''")}' -Force
+`;
+const pack = spawnSync(
+  "powershell.exe",
+  ["-NoProfile", "-NonInteractive", "-Command", ps],
+  { encoding: "utf8" },
+);
+if (pack.status !== 0 || !existsSync(zipPath)) {
+  console.error(pack.stderr || pack.stdout || "Compress-Archive failed");
   process.exit(1);
 }
 
-const digest = createHash("sha256").update(readFileSync(zipPath)).digest("hex");
+const bytes = readFileSync(zipPath);
+if (bytes.length < 100) {
+  console.error(`zip too small (${bytes.length} bytes)`);
+  process.exit(1);
+}
+// PK\x03\x04 local file header
+if (bytes[0] !== 0x50 || bytes[1] !== 0x4b) {
+  console.error("zip missing PK header");
+  process.exit(1);
+}
+
+const digest = createHash("sha256").update(bytes).digest("hex");
 writeFileSync(path.join(dist, "SHA256SUMS"), `${digest}  ${zipName}\n`, "utf8");
 
-console.log(`wrote ${path.relative(root, zipPath)}`);
+// Sanity: list entries via Expand-Archive to a temp dir
+const verifyDir = path.join(dist, "verify-extract");
+rmSync(verifyDir, { recursive: true, force: true });
+const verify = spawnSync(
+  "powershell.exe",
+  [
+    "-NoProfile",
+    "-NonInteractive",
+    "-Command",
+    `Expand-Archive -Path '${zipPath.replace(/'/g, "''")}' -DestinationPath '${verifyDir.replace(/'/g, "''")}' -Force; if (-not (Test-Path (Join-Path '${verifyDir.replace(/'/g, "''")}' 'tabfocus\\manifest.json'))) { throw 'manifest missing after extract' }`,
+  ],
+  { encoding: "utf8" },
+);
+if (verify.status !== 0) {
+  console.error(verify.stderr || verify.stdout || "extract verify failed");
+  process.exit(1);
+}
+rmSync(verifyDir, { recursive: true, force: true });
+
+console.log(`wrote ${path.relative(root, zipPath)} (${bytes.length} bytes)`);
 console.log(`${digest}  ${zipName}`);
-console.log("Extract the zip, then Load unpacked → select the extracted folder.");
+console.log("Extract → Load unpacked → select the inner tabfocus/ folder.");

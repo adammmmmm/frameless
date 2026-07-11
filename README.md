@@ -25,8 +25,8 @@ Session metadata (origin window, focused window, tab id) lives in `chrome.storag
 ## Install (unpacked zip — no npm)
 
 1. Download **`tabfocus-v*-unpacked.zip`** from [Releases](https://github.com/adammmmmm/tabfocus/releases)
-2. Extract the zip to a folder
-3. Chrome → `chrome://extensions` → Developer mode → **Load unpacked** → select that folder
+2. Extract the zip (you get a `tabfocus/` folder)
+3. Chrome → `chrome://extensions` → Developer mode → **Load unpacked** → select the **`tabfocus`** folder
 
 ## Install (from source)
 
