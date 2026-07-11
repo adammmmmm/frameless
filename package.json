@@ -1,0 +1,19 @@
+{
+  "name": "tabfocus",
+  "version": "3.0.0",
+  "private": true,
+  "description": "Toggle a tab into a focused popup window and back, preserving tab state when possible.",
+  "type": "module",
+  "scripts": {
+    "build": "node scripts/build.mjs",
+    "test": "npm run build && node --test dist-test/urls.test.js",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "verify": "npm run typecheck && npm run test"
+  },
+  "devDependencies": {
+    "@types/chrome": "^0.0.287",
+    "@types/node": "^22.10.5",
+    "esbuild": "^0.25.0",
+    "typescript": "^5.7.3"
+  }
+}

@@ -1,19 +1,35 @@
 {
   "name": "TabFocus",
-  "version": "2.0.0",
-  "description": "Declutter your browsing experience",
-  "permissions": ["activeTab", "contextMenus"],
-  "action": {
-    "default_title": "TabFocus"
-  },
+  "version": "3.0.0",
+  "description": "Toggle a tab into a focused popup window (hide tabs, omnibox, and bookmarks) and restore it cleanly.",
+  "manifest_version": 3,
+  "permissions": ["contextMenus", "storage", "tabs"],
   "background": {
-    "service_worker": "background.js"
+    "service_worker": "background.js",
+    "type": "module"
+  },
+  "action": {
+    "default_title": "Toggle TabFocus",
+    "default_icon": {
+      "16": "src/images/icons/icon_16.png",
+      "32": "src/images/icons/icon_32.png",
+      "48": "src/images/icons/icon_48.png",
+      "128": "src/images/icons/icon_128.png"
+    }
+  },
+  "commands": {
+    "toggle-tabfocus": {
+      "suggested_key": {
+        "default": "Ctrl+Shift+F",
+        "mac": "Command+Shift+F"
+      },
+      "description": "Toggle TabFocus on the active tab"
+    }
   },
   "icons": {
     "16": "src/images/icons/icon_16.png",
     "32": "src/images/icons/icon_32.png",
     "48": "src/images/icons/icon_48.png",
     "128": "src/images/icons/icon_128.png"
-  },
-  "manifest_version": 3
+  }
 }
