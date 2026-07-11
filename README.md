@@ -22,13 +22,21 @@ Session metadata (origin window, focused window, tab id) lives in `chrome.storag
 - Keyboard: **Ctrl+Shift+F** (Windows/Linux) / **⌘⇧F** (macOS) — remappable in `chrome://extensions/shortcuts`  
 - Badge shows **ON** while TabFocus considers the tab focused  
 
-## Install (developer)
+## Install (unpacked zip — no npm)
+
+1. Download **`tabfocus-v*-unpacked.zip`** from [Releases](https://github.com/adammmmmm/tabfocus/releases)
+2. Extract the zip to a folder
+3. Chrome → `chrome://extensions` → Developer mode → **Load unpacked** → select that folder
+
+## Install (from source)
 
 1. `git clone https://github.com/adammmmmm/tabfocus.git && cd tabfocus`
 2. `npm install && npm run build` (generates `background.js`)
 3. Chrome → `chrome://extensions` → Developer mode → **Load unpacked** → select this folder
 
-A prebuilt `background.js` is committed so load-unpacked works after clone + `npm run build` once, or after pull when the build artifact is present.
+```bash
+npm run pack   # writes dist/tabfocus-v*-unpacked.zip
+```
 
 ## Develop
 
