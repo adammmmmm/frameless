@@ -61,18 +61,25 @@ cpSync(path.join(root, "src", "images", "icons"), path.join(stage, "src", "image
 
 rmSync(zipPath, { force: true });
 
-// Compress-Archive produces Explorer-compatible zips (unlike `tar -a` on some setups).
-const ps = `
-$ErrorActionPreference = 'Stop'
-Compress-Archive -Path (Join-Path '${stageRoot.replace(/'/g, "''")}' 'frameless') -DestinationPath '${zipPath.replace(/'/g, "''")}' -Force
-`;
-const pack = spawnSync(
-  "powershell.exe",
-  ["-NoProfile", "-NonInteractive", "-Command", ps],
-  { encoding: "utf8" },
-);
+const isWin = process.platform === "win32";
+const q = (v) => v.replace(/'/g, "''");
+
+// On Windows, Compress-Archive produces Explorer-compatible zips (unlike `tar -a` on some setups).
+// Elsewhere, use the system `zip`.
+const pack = isWin
+  ? spawnSync(
+      "powershell.exe",
+      [
+        "-NoProfile",
+        "-NonInteractive",
+        "-Command",
+        `$ErrorActionPreference = 'Stop'; Compress-Archive -Path (Join-Path '${q(stageRoot)}' 'frameless') -DestinationPath '${q(zipPath)}' -Force`,
+      ],
+      { encoding: "utf8" },
+    )
+  : spawnSync("zip", ["-qr", "-X", zipPath, "frameless"], { cwd: stageRoot, encoding: "utf8" });
 if (pack.status !== 0 || !existsSync(zipPath)) {
-  console.error(pack.stderr || pack.stdout || "Compress-Archive failed");
+  console.error(pack.stderr || pack.stdout || "zip failed");
   process.exit(1);
 }
 
@@ -90,21 +97,23 @@ if (bytes[0] !== 0x50 || bytes[1] !== 0x4b) {
 const digest = createHash("sha256").update(bytes).digest("hex");
 writeFileSync(path.join(dist, "SHA256SUMS"), `${digest}  ${zipName}\n`, "utf8");
 
-// Sanity: list entries via Expand-Archive to a temp dir
+// Sanity: extract to a temp dir and check the manifest is where Chrome expects it.
 const verifyDir = path.join(dist, "verify-extract");
 rmSync(verifyDir, { recursive: true, force: true });
-const verify = spawnSync(
-  "powershell.exe",
-  [
-    "-NoProfile",
-    "-NonInteractive",
-    "-Command",
-    `Expand-Archive -Path '${zipPath.replace(/'/g, "''")}' -DestinationPath '${verifyDir.replace(/'/g, "''")}' -Force; if (-not (Test-Path (Join-Path '${verifyDir.replace(/'/g, "''")}' 'frameless\\manifest.json'))) { throw 'manifest missing after extract' }`,
-  ],
-  { encoding: "utf8" },
-);
-if (verify.status !== 0) {
-  console.error(verify.stderr || verify.stdout || "extract verify failed");
+const verify = isWin
+  ? spawnSync(
+      "powershell.exe",
+      [
+        "-NoProfile",
+        "-NonInteractive",
+        "-Command",
+        `Expand-Archive -Path '${q(zipPath)}' -DestinationPath '${q(verifyDir)}' -Force`,
+      ],
+      { encoding: "utf8" },
+    )
+  : spawnSync("unzip", ["-q", zipPath, "-d", verifyDir], { encoding: "utf8" });
+if (verify.status !== 0 || !existsSync(path.join(verifyDir, "frameless", "manifest.json"))) {
+  console.error(verify.stderr || verify.stdout || "extract verify failed: manifest missing");
   process.exit(1);
 }
 rmSync(verifyDir, { recursive: true, force: true });
