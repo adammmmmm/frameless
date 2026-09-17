@@ -187,7 +187,7 @@ async function restoreTab(tab) {
     }
   }
 }
-async function toggleTabFocus(tab, windowType) {
+async function toggleFrameless(tab, windowType) {
   if (tab.id == null) {
     return { ok: false, reason: "No active tab." };
   }
@@ -215,16 +215,16 @@ async function setFocusedBadge(tabId, focused) {
 }
 
 // src/background.ts
-var MENU_ID = "tabfocus-toggle";
+var MENU_ID = "frameless-toggle";
 function logError(context, error) {
   const message = error instanceof Error ? error.message : String(error);
-  console.error(`[TabFocus] ${context}: ${message}`);
+  console.error(`[Frameless] ${context}: ${message}`);
 }
 async function ensureContextMenu() {
   await chrome.contextMenus.removeAll();
   await chrome.contextMenus.create({
     id: MENU_ID,
-    title: "Toggle TabFocus",
+    title: "Toggle Frameless",
     contexts: ["all"]
   });
 }
@@ -240,11 +240,11 @@ async function handleToggle(tabFromEvent) {
   try {
     const tab = await resolveActiveTab(tabFromEvent);
     if (!tab?.id) {
-      console.warn("[TabFocus] No tab to toggle.");
+      console.warn("[Frameless] No tab to toggle.");
       return;
     }
     if (isRestrictedUrl(tab.url)) {
-      console.warn("[TabFocus] Restricted URL; no-op.");
+      console.warn("[Frameless] Restricted URL; no-op.");
       return;
     }
     let windowType;
@@ -256,9 +256,9 @@ async function handleToggle(tabFromEvent) {
         windowType = void 0;
       }
     }
-    const result = await toggleTabFocus(tab, windowType);
+    const result = await toggleFrameless(tab, windowType);
     if (!result.ok) {
-      console.warn(`[TabFocus] ${result.reason}`);
+      console.warn(`[Frameless] ${result.reason}`);
       return;
     }
     const [active] = await chrome.tabs.query({
@@ -270,7 +270,7 @@ async function handleToggle(tabFromEvent) {
     }
     if (result.degraded) {
       console.warn(
-        "[TabFocus] Used degraded URL rehost path; in-page state may have been lost."
+        "[Frameless] Used degraded URL rehost path; in-page state may have been lost."
       );
     }
   } catch (error) {
@@ -291,7 +291,7 @@ chrome.contextMenus.onClicked.addListener((info, tab) => {
   void handleToggle(tab);
 });
 chrome.commands.onCommand.addListener((command) => {
-  if (command !== "toggle-tabfocus") return;
+  if (command !== "toggle-frameless") return;
   void handleToggle();
 });
 chrome.tabs.onRemoved.addListener((tabId) => {

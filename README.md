@@ -1,70 +1,89 @@
-# TabFocus
+<p align="center">
+  <img src="./src/images/brand/header.png" alt="Frameless" width="960">
+</p>
 
-Toggle the current tab into a **focused popup window** (hide tabs, omnibox, and bookmarks) and restore it to a normal window. Narrow on purpose.
+<p align="center">
+  <a href="https://github.com/adammmmmm/frameless/releases"><img alt="Release" src="https://img.shields.io/github/v/release/adammmmmm/frameless?style=flat-square&color=6D2BD9"></a>
+  <img alt="Manifest V3" src="https://img.shields.io/badge/Chrome-MV3-6D2BD9?style=flat-square">
+  <a href="./LICENSE"><img alt="MIT" src="https://img.shields.io/badge/license-MIT-6D2BD9?style=flat-square"></a>
+</p>
 
-![Example screenshot](./src/images/examples/example.png)
+**Frameless** turns the current tab into a clean popup window with no tab strip, address bar, or bookmarks. Toggle again and the tab goes back where it came from. The page keeps its state either way.
 
-## Behavior (v3)
+<p align="center">
+  <img src="./src/images/examples/example.png" alt="A normal Chrome tab and the same page after toggling Frameless" width="645">
+</p>
 
-| Action | What happens |
-| --- | --- |
-| **Focus** | Prefer `windows.create({ tabId, type: "popup" })` so the **same tab** moves into a popup (document state preserved when Chrome allows it). |
-| **Restore** | Move the tab back to its **origin normal window** when that window still exists; otherwise the first normal window, otherwise a new normal window. |
-| **Degraded path** | If the move fails, fall back to opening `tab.url` in a new popup/normal window and closing the old tab. **In-page state may be lost.** Logged to the service worker console. |
-| **Restricted URLs** | No-op on `chrome://`, Web Store, `edge://`, `about:`, extension pages, etc. |
+## Install
 
-Session metadata (origin window, focused window, tab id) lives in `chrome.storage.session`.
+**From a release (no build step)**
 
-## Usage
+1. Download `frameless-v*-unpacked.zip` from [Releases](https://github.com/adammmmmm/frameless/releases) and extract it.
+2. Open `chrome://extensions`, turn on **Developer mode**, and click **Load unpacked**.
+3. Select the extracted `frameless` folder.
 
-- Click the extension icon  
-- Right-click → **Toggle TabFocus**  
-- Keyboard: **Ctrl+Shift+F** (Windows/Linux) / **⌘⇧F** (macOS) — remappable in `chrome://extensions/shortcuts`  
-
-## Install (unpacked zip — no npm)
-
-1. Download **`tabfocus-v*-unpacked.zip`** from [Releases](https://github.com/adammmmmm/tabfocus/releases)
-2. Extract the zip (you get a `tabfocus/` folder)
-3. Chrome → `chrome://extensions` → Developer mode → **Load unpacked** → select the **`tabfocus`** folder
-
-## Install (from source)
-
-1. `git clone https://github.com/adammmmmm/tabfocus.git && cd tabfocus`
-2. `npm install && npm run build` (generates `background.js`)
-3. Chrome → `chrome://extensions` → Developer mode → **Load unpacked** → select this folder
+<details>
+<summary><b>From source</b></summary>
 
 ```bash
-npm run pack   # writes dist/tabfocus-v*-unpacked.zip
+git clone https://github.com/adammmmmm/frameless.git
+cd frameless
+npm install
+npm run build
 ```
+
+Then load the repo folder with **Load unpacked** as above. `npm run pack` writes the release zip to `dist/`.
+
+</details>
+
+## Use
+
+Any of these toggles the active tab:
+
+- Click the Frameless icon in the toolbar.
+- Right-click the page and choose **Toggle Frameless**.
+- Press <kbd>⌘</kbd><kbd>⇧</kbd><kbd>F</kbd> on macOS or <kbd>Ctrl</kbd><kbd>Shift</kbd><kbd>F</kbd> on Windows and Linux. Change it at `chrome://extensions/shortcuts`.
+
+The toolbar badge shows **ON** while a tab is frameless.
+
+## How it works
+
+| | |
+| --- | --- |
+| **Focus** | The live tab is moved into a new popup window, so page state, scroll position, and form input are preserved. |
+| **Restore** | The tab moves back to the window it came from. If that window is gone, it goes to the first normal window, or a new one. |
+| **Fallback** | If Chrome refuses to move the tab, Frameless opens the URL in a fresh window and closes the old tab. Page state can be lost in this case, and a warning is logged to the service worker console. |
+| **Restricted pages** | Nothing happens on `chrome://`, `edge://`, `about:`, the Web Store, or extension pages. |
+
+Frameless remembers which window each tab came from in `chrome.storage.session`, which Chrome clears when the browser closes.
+
+## Permissions
+
+| Permission | Used for |
+| --- | --- |
+| `tabs` | Reading the tab's URL and window, and moving it between windows |
+| `contextMenus` | The right-click toggle |
+| `storage` | Remembering each tab's origin window for the session |
+
+No host permissions. No network access. No analytics.
+
+## Limits
+
+- Chrome has no API to hide its UI on a single tab, so Frameless uses popup windows. This is the closest Chrome allows.
+- Fullscreen, picture-in-picture, and hiding site-specific UI are out of scope.
+- The fallback path reloads the page and can drop single-page-app or form state. It only runs when the normal move fails.
 
 ## Develop
 
 ```bash
 npm install
-npm run build      # bundle service worker + tests
+npm run build      # bundle the service worker and tests with esbuild
 npm run typecheck  # tsc --noEmit
-npm test           # pure unit tests (URL policy)
+npm test           # unit tests for the URL policy
 npm run verify     # typecheck + test
 ```
 
-Source is TypeScript under `src/`. The MV3 service worker entry is `background.js` (esbuild bundle).
-
-## Permissions
-
-| Permission | Why |
-| --- | --- |
-| `contextMenus` | Toggle from the page context menu |
-| `storage` | Session map for origin window / focus state |
-| `tabs` | Read tab URL/window id, move tabs, update focus reliably |
-
-No host permissions, no tracking, no network.
-
-## Limits (honest)
-
-- Chrome does not expose a first-class “hide browser chrome on this tab” API; TabFocus uses **popup windows**.
-- Multi-window restore prefers the **recorded origin window**, not “whatever is first.”
-- Fullscreen, PiP, and site-injected UI hiding are **out of scope**.
-- Degraded URL rehost can drop SPA/form state; prefer the move path (default).
+Source is TypeScript in `src/`. The service worker entry is `src/background.ts`, bundled to `background.js`. Brand assets live in `src/images/brand/`.
 
 ## License
 

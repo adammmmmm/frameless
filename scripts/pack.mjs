@@ -1,12 +1,12 @@
 /**
  * Build a Windows-compatible load-unpacked zip via PowerShell Compress-Archive.
  * Layout:
- *   tabfocus-vX.Y.Z-unpacked.zip
- *     tabfocus/
+ *   frameless-vX.Y.Z-unpacked.zip
+ *     frameless/
  *       manifest.json
  *       background.js
  *       ...
- * Extract the zip, then Load unpacked → select the `tabfocus` folder.
+ * Extract the zip, then Load unpacked → select the `frameless` folder.
  */
 import { createHash } from "node:crypto";
 import { spawnSync } from "node:child_process";
@@ -25,9 +25,9 @@ import { fileURLToPath } from "node:url";
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const dist = path.join(root, "dist");
 const stageRoot = path.join(dist, "stage");
-const stage = path.join(stageRoot, "tabfocus");
+const stage = path.join(stageRoot, "frameless");
 const version = JSON.parse(readFileSync(path.join(root, "package.json"), "utf8")).version;
-const zipName = `tabfocus-v${version}-unpacked.zip`;
+const zipName = `frameless-v${version}-unpacked.zip`;
 const zipPath = path.join(dist, zipName);
 
 const build = spawnSync(process.execPath, [path.join(root, "scripts", "build.mjs")], {
@@ -64,7 +64,7 @@ rmSync(zipPath, { force: true });
 // Compress-Archive produces Explorer-compatible zips (unlike `tar -a` on some setups).
 const ps = `
 $ErrorActionPreference = 'Stop'
-Compress-Archive -Path (Join-Path '${stageRoot.replace(/'/g, "''")}' 'tabfocus') -DestinationPath '${zipPath.replace(/'/g, "''")}' -Force
+Compress-Archive -Path (Join-Path '${stageRoot.replace(/'/g, "''")}' 'frameless') -DestinationPath '${zipPath.replace(/'/g, "''")}' -Force
 `;
 const pack = spawnSync(
   "powershell.exe",
@@ -99,7 +99,7 @@ const verify = spawnSync(
     "-NoProfile",
     "-NonInteractive",
     "-Command",
-    `Expand-Archive -Path '${zipPath.replace(/'/g, "''")}' -DestinationPath '${verifyDir.replace(/'/g, "''")}' -Force; if (-not (Test-Path (Join-Path '${verifyDir.replace(/'/g, "''")}' 'tabfocus\\manifest.json'))) { throw 'manifest missing after extract' }`,
+    `Expand-Archive -Path '${zipPath.replace(/'/g, "''")}' -DestinationPath '${verifyDir.replace(/'/g, "''")}' -Force; if (-not (Test-Path (Join-Path '${verifyDir.replace(/'/g, "''")}' 'frameless\\manifest.json'))) { throw 'manifest missing after extract' }`,
   ],
   { encoding: "utf8" },
 );
@@ -111,4 +111,4 @@ rmSync(verifyDir, { recursive: true, force: true });
 
 console.log(`wrote ${path.relative(root, zipPath)} (${bytes.length} bytes)`);
 console.log(`${digest}  ${zipName}`);
-console.log("Extract → Load unpacked → select the inner tabfocus/ folder.");
+console.log("Extract → Load unpacked → select the inner frameless/ folder.");

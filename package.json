@@ -1,6 +1,6 @@
 {
-  "name": "tabfocus",
-  "version": "3.0.0",
+  "name": "frameless",
+  "version": "3.1.0",
   "private": true,
   "description": "Toggle a tab into a focused popup window and back, preserving tab state when possible.",
   "type": "module",

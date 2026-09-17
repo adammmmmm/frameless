@@ -171,7 +171,7 @@ export async function restoreTab(tab: chrome.tabs.Tab): Promise<ToggleResult> {
 /**
  * Toggle focus for a tab given the window it currently lives in.
  */
-export async function toggleTabFocus(
+export async function toggleFrameless(
   tab: chrome.tabs.Tab,
   windowType: string | undefined,
 ): Promise<ToggleResult> {

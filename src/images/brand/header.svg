@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="300" viewBox="0 0 960 300">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#0E0A12"/><stop offset="1" stop-color="#1A1030"/></linearGradient>
+    <linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#8A2BE2"/><stop offset="0.55" stop-color="#5B21C9"/><stop offset="1" stop-color="#2E1BA8"/></linearGradient>
+    <radialGradient id="glow" cx="0.5" cy="0.5" r="0.5"><stop offset="0" stop-color="#8A2BE2" stop-opacity="0.55"/><stop offset="1" stop-color="#8A2BE2" stop-opacity="0"/></radialGradient>
+  </defs>
+  <rect width="960" height="300" rx="20" fill="url(#bg)"/>
+  <circle cx="180" cy="150" r="200" fill="url(#glow)"/>
+  <g transform="translate(96,86)">
+    <rect width="128" height="128" rx="28" fill="url(#g)"/>
+    <g fill="none" stroke="#F7F5FA" stroke-width="7" stroke-linecap="round" opacity="0.5">
+      <path d="M28 50V38a10 10 0 0 1 10-10h12"/>
+      <path d="M100 78v12a10 10 0 0 1-10 10H78"/>
+    </g>
+    <rect x="42" y="42" width="44" height="44" rx="9" fill="#F7F5FA"/>
+  </g>
+  <text x="270" y="140" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Inter, Roboto, sans-serif" font-size="56" font-weight="700" fill="#F7F5FA" letter-spacing="-1.5">Frameless</text>
+  <text x="272" y="182" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Inter, Roboto, sans-serif" font-size="20" fill="#C9BFD6">Turn any tab into a clean, chrome-free window. Toggle back when you're done.</text>
+  <g font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Inter, Roboto, sans-serif" font-size="13" fill="#E4D6FF">
+    <rect x="272" y="212" width="112" height="28" rx="14" fill="#8A2BE2" fill-opacity="0.2"/><text x="328" y="230" text-anchor="middle">Chrome · MV3</text>
+    <rect x="394" y="212" width="112" height="28" rx="14" fill="#8A2BE2" fill-opacity="0.2"/><text x="450" y="230" text-anchor="middle">⌘⇧F to toggle</text>
+    <rect x="516" y="212" width="112" height="28" rx="14" fill="#8A2BE2" fill-opacity="0.2"/><text x="572" y="230" text-anchor="middle">No tracking</text>
+  </g>
+</svg>

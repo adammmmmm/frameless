@@ -13,7 +13,7 @@ const RESTRICTED_PREFIXES = [
 ] as const;
 
 /**
- * Return true when TabFocus must no-op for this URL.
+ * Return true when Frameless must no-op for this URL.
  */
 export function isRestrictedUrl(url: string | undefined | null): boolean {
   if (!url) return true;

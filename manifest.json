@@ -1,6 +1,6 @@
 {
-  "name": "TabFocus",
-  "version": "3.0.0",
+  "name": "Frameless",
+  "version": "3.1.0",
   "description": "Toggle a tab into a focused popup window (hide tabs, omnibox, and bookmarks) and restore it cleanly.",
   "manifest_version": 3,
   "permissions": ["contextMenus", "storage", "tabs"],
@@ -9,7 +9,7 @@
     "type": "module"
   },
   "action": {
-    "default_title": "Toggle TabFocus",
+    "default_title": "Toggle Frameless",
     "default_icon": {
       "16": "src/images/icons/icon_16.png",
       "32": "src/images/icons/icon_32.png",
@@ -18,12 +18,12 @@
     }
   },
   "commands": {
-    "toggle-tabfocus": {
+    "toggle-frameless": {
       "suggested_key": {
         "default": "Ctrl+Shift+F",
         "mac": "Command+Shift+F"
       },
-      "description": "Toggle TabFocus on the active tab"
+      "description": "Toggle Frameless on the active tab"
     }
   },
   "icons": {

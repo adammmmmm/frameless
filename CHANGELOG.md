@@ -1,5 +1,13 @@
 # Changelog
 
+## [3.1.0] - 2026-09-17
+
+### Changed
+
+- Renamed the project from TabFocus to **Frameless**. New icon set and README.
+- Keyboard command id is now `toggle-frameless`; the shortcut itself is unchanged.
+- Release zip is now `frameless-vX.Y.Z-unpacked.zip` with an inner `frameless/` folder.
+
 ## [3.0.0] - 2026-07-11
 
 ### Changed

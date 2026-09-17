@@ -28,6 +28,6 @@ describe("isRestrictedUrl", () => {
   it("allows normal web pages", () => {
     assert.equal(isRestrictedUrl("https://example.com"), false);
     assert.equal(isRestrictedUrl("http://localhost:3000/app"), false);
-    assert.equal(isRestrictedUrl("https://github.com/adammmmmm/tabfocus"), false);
+    assert.equal(isRestrictedUrl("https://github.com/adammmmmm/frameless"), false);
   });
 });
