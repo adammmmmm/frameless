@@ -18,7 +18,7 @@
   <text x="272" y="182" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Inter, Roboto, sans-serif" font-size="20" fill="#C9BFD6">Turn any tab into a clean, chrome-free window.</text>
   <g font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Inter, Roboto, sans-serif" font-size="13" fill="#E4D6FF">
     <rect x="272" y="212" width="112" height="28" rx="14" fill="#8A2BE2" fill-opacity="0.2"/><text x="328" y="230" text-anchor="middle">Chrome · MV3</text>
-    <rect x="394" y="212" width="112" height="28" rx="14" fill="#8A2BE2" fill-opacity="0.2"/><text x="450" y="230" text-anchor="middle">⌘⇧F to toggle</text>
+    <rect x="394" y="212" width="112" height="28" rx="14" fill="#8A2BE2" fill-opacity="0.2"/><text x="450" y="230" text-anchor="middle">⌥⇧F to toggle</text>
     <rect x="516" y="212" width="112" height="28" rx="14" fill="#8A2BE2" fill-opacity="0.2"/><text x="572" y="230" text-anchor="middle">No tracking</text>
   </g>
 </svg>

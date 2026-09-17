@@ -1,5 +1,11 @@
 # Changelog
 
+## [3.1.1] - 2026-09-17
+
+### Fixed
+
+- Default shortcut is now `Alt+Shift+F` (`Option+Shift+F`, ⌥⇧F, on macOS). Chrome reserves `⌘⇧F` on macOS and silently refused to auto-assign it, leaving the command unset after install.
+
 ## [3.1.0] - 2026-09-17
 
 ### Changed

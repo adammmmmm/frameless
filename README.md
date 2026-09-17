@@ -42,7 +42,7 @@ Any of these toggles the active tab:
 
 - Click the Frameless icon in the toolbar.
 - Right-click the page and choose **Toggle Frameless**.
-- Press <kbd>⌘</kbd><kbd>⇧</kbd><kbd>F</kbd> on macOS or <kbd>Ctrl</kbd><kbd>Shift</kbd><kbd>F</kbd> on Windows and Linux. Change it at `chrome://extensions/shortcuts`.
+- Press <kbd>Option</kbd><kbd>Shift</kbd><kbd>F</kbd> (⌥⇧F) on macOS or <kbd>Alt</kbd><kbd>Shift</kbd><kbd>F</kbd> on Windows and Linux. Change it at `chrome://extensions/shortcuts`.
 
 The toolbar badge shows **ON** while a tab is frameless.
 

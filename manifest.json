@@ -1,6 +1,6 @@
 {
   "name": "Frameless",
-  "version": "3.1.0",
+  "version": "3.1.1",
   "description": "Toggle a tab into a focused popup window (hide tabs, omnibox, and bookmarks) and restore it cleanly.",
   "manifest_version": 3,
   "permissions": ["contextMenus", "storage", "tabs"],
@@ -20,8 +20,8 @@
   "commands": {
     "toggle-frameless": {
       "suggested_key": {
-        "default": "Ctrl+Shift+F",
-        "mac": "Command+Shift+F"
+        "default": "Alt+Shift+F",
+        "mac": "Alt+Shift+F"
       },
       "description": "Toggle Frameless on the active tab"
     }
