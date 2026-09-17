@@ -53,9 +53,9 @@
   <g transform="translate(540,36)" filter="url(#sh)">
     <rect width="380" height="280" rx="12" fill="#FFFFFF"/>
     <g clip-path="url(#cr)">
-      <rect width="380" height="22" fill="#EFEDF3"/>
+      <rect width="380" height="22" fill="#35363A"/>
       <circle cx="16" cy="11" r="4.5" fill="#FF5F57"/><circle cx="30" cy="11" r="4.5" fill="#FEBC2E"/><circle cx="44" cy="11" r="4.5" fill="#28C840"/>
-      <rect x="66" y="8" width="70" height="6" rx="3" fill="#C9BFD6"/>
+      <rect x="66" y="8" width="70" height="6" rx="3" fill="#8A8D94"/>
       <use href="#page" y="22"/>
     </g>
   </g>

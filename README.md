@@ -11,7 +11,7 @@
 **Frameless** turns the current tab into a clean popup window with no tab strip, address bar, or bookmarks. Toggle again and the tab goes back where it came from. The page keeps its state either way.
 
 <p align="center">
-  <img src="./src/images/brand/before-after.png?v=2" alt="A normal Chrome tab and the same page after toggling Frameless" width="960">
+  <img src="./src/images/brand/before-after.png?v=3" alt="A normal Chrome tab and the same page after toggling Frameless" width="960">
 </p>
 
 ## Install
